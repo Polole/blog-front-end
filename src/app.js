@@ -1,6 +1,7 @@
 "use strict";
 let blog = {}
 
+blog.API_URL = "http://localhost"
 blog.content = null;
 blog.router = new Navigo(null);
 blog.createTemplateSkeleton = function(templateLocation){
@@ -14,30 +15,40 @@ blog.templates = {
     "/posts/create": blog.createTemplateSkeleton("create_posts.html")
 };
 
+blog.getRestOfTemplates = function(){
+    let self = this;
+    let template = this.templates["/posts/create"]
+    $.get(template.location, function(data){
+        template.data = data
+    })
+}
+
 blog.getFirstTemplate = function(){
     let self = this;
     let template = this.templates[window.location.pathname]
-    this.router.pause()
     $.get(template.location, function(data){
         template.data = data
-        self.router.navigate(window.location.pathname)
         self.router.resume();
+        self.router.navigate(window.location.pathname)
     })
 }
 
 blog.routes = {
     "/": function(){
-        blog.changeContent();
+        blog.changeContent("/");
     },
     "/posts/create": function(){
-        blog.changeContent();
+        blog.changeContent("/posts/create");
     }
 }
 
-blog.changeContent = function(){
-    let template = this.templates[window.location.pathname]["data"]
+blog.changeContent = function(templateLocation){
+    let template = this.templates[templateLocation]["data"]
+    let self = this;
     if(this.content){
-        this.content.html(nunjucks.renderString(template, {"var": "shrek"}));
+        $.get(this.API_URL+"/", function(data){
+            self.content.html(nunjucks.renderString(template, {"posts": data}));
+        })
     } else {
         throw Error("Content did not exist at this time.");
     }
@@ -50,6 +61,8 @@ blog.initializeRoutes = function(){
 $(document).ready(function(){
     nunjucks.configure({"autoescape": true})
     blog.content = $('#content');
-    blog.getFirstTemplate()
+    blog.router.pause();
     blog.initializeRoutes();
+    blog.getFirstTemplate();
+    blog.getRestOfTemplates();
 })

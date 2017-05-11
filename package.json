@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-  	"navigo": "4.7.1",
-	"nunjucks": "3.0.0",
-	"jquery": "3.2.1"
+    "navigo": "4.7.1",
+    "nunjucks": "3.0.0",
+    "jquery": "3.2.1"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/polole/blog-front-end/issues"
   },
-  "homepage": "https://github.com/polole/blog-front-end#readme"
+  "homepage": "https://github.com/polole/blog-front-end#readme",
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babelify": "^7.3.0"
+  }
 }

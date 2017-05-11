@@ -15,8 +15,9 @@ let blog = makeIterable({})
 
 blog.API_URL = "http://localhost:5000"
 blog.content = null;
-blog.router = new Navigo(null);
-blog.loginStatus = true;
+blog.router = new Navigo("http://localhost/");
+blog.loginStatus = false;
+blog.xhr = false;
 blog.createTemplateSkeleton = function(templateLocation, apiLocation){
     let object = {
         "data": null,
@@ -38,6 +39,18 @@ blog.createTemplateSkeleton = function(templateLocation, apiLocation){
             "posts": object
         };
     };
+    let postTemplate = blog.createTemplateSkeleton(
+        "posts.html",
+        "/post"
+    )
+    postTemplate.callback = function(blog, object){
+        return {
+            "post": object
+        }
+    }
+    postTemplate.params = function(params){
+        return params.id;
+    }
     let createPostsTemplate = blog.createTemplateSkeleton(
         "create_posts.html",
         null
@@ -49,8 +62,12 @@ blog.createTemplateSkeleton = function(templateLocation, apiLocation){
     };
     blog.templates = makeIterable({
         "/": indexTemplate,
+        "/post": postTemplate,
         "/posts/create": createPostsTemplate
     });
+    blog.regexMap = makeIterable({
+        "/post/.+": "/post"
+    })
 })(blog);
 
 blog.getRestOfTemplates = function(){
@@ -66,33 +83,68 @@ blog.getRestOfTemplates = function(){
 
 blog.getFirstTemplate = function(){
     let self = this;
-    let template = this.templates[window.location.pathname]
-    blog.firstTemplate = template.location;
-    $.get(template.location, function(data){
-        template.data = data
+    let templateLocation = null;
+    for(var regex in this.regexMap){
+        if(!this.regexMap.hasOwnProperty(regex)) continue;
+        let regexp = new RegExp(regex);
+        if(regexp.test(window.location.pathname)){
+            templateLocation = this.regexMap[regex];
+        }
+    }
+    if(!templateLocation){
+        templateLocation = window.location.pathname;
+    }
+    console.log(templateLocation)
+    let template = this.templates[templateLocation]
+    if(template){
+        blog.firstTemplate = template.location;
+        $.get(template.location, function(data){
+            template.data = data
+            self.router.resume();
+            self.router.navigate(window.location.pathname);
+        });
+    } else {
         self.router.resume();
-        self.router.navigate(window.location.pathname)
-    });
+        self.router.navigate(window.location.pathname);
+    }
 };
 
 blog.routes = {
-    "/": function(){
-        blog.changeContent("/");
+    "/":{
+        as: 'index',
+        uses: function(){
+            blog.changeContent("/");
+        }
     },
-    "/posts/create": function(){
-        blog.changeContent("/posts/create");
+    "/post/:id": {
+        as: 'posts.view',
+        uses: function(params){
+            blog.changeContent("/post", params)
+        }
+    },
+    "/posts/create":{
+        as: 'posts.create',
+        uses: function(){
+            blog.changeContent("/posts/create");
+        }
     }
 }
 
-blog.changeContent = function(templateLocation){
+blog.changeContent = function(templateLocation, params){
     let template = this.templates[templateLocation]
     let self = this;
     if(this.content){
-        if(template.api){
-            this.router.pause();
-            $.get(this.API_URL+"/", function(data){
+        if(blog.xhr){
+            blog.xhr.abort()
+            blog.xhr = null;
+        }
+        let getUrl = template.api
+        if(getUrl){
+            if(params){
+                getUrl = getUrl + "/" + template.params(params);
+            }
+            blog.xhr = $.get(getUrl, function(data){
                 self.content.html(nunjucks.renderString(template.data, template.callback(self, data)));
-                self.router.resume();
             })
         } else {
             self.content.html(nunjucks.renderString(template.data, template.callback(self)))
@@ -103,6 +155,10 @@ blog.changeContent = function(templateLocation){
 }
 
 blog.initializeRoutes = function(){
+    let self = this;
+    this.router.notFound(function(){
+        self.content.html("Not found!");
+    })
     this.router.on(this.routes).resolve();
 }
 

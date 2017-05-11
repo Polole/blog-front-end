@@ -22,7 +22,9 @@ blog.createTemplateSkeleton = function(templateLocation, apiLocation){
     let object = {
         "data": null,
         "location": "/templates/" + templateLocation,
-        "api": null
+        "api": null,
+        "urlConstructor": function(params){ return this.api },
+        "callback": function(blog){ return {} }
     };
     if(apiLocation){
         object["api"] = this.API_URL + apiLocation;
@@ -48,8 +50,8 @@ blog.createTemplateSkeleton = function(templateLocation, apiLocation){
             "post": object
         }
     }
-    postTemplate.params = function(params){
-        return params.id;
+    postTemplate.urlConstructor = function(params){
+        return this.api + "/" + params.id;
     }
     let createPostsTemplate = blog.createTemplateSkeleton(
         "create_posts.html",
@@ -94,7 +96,6 @@ blog.getFirstTemplate = function(){
     if(!templateLocation){
         templateLocation = window.location.pathname;
     }
-    console.log(templateLocation)
     let template = this.templates[templateLocation]
     if(template){
         blog.firstTemplate = template.location;
@@ -130,19 +131,18 @@ blog.routes = {
     }
 }
 
+blog.abortXhr = function(){
+    this.xhr && this.xhr.abort();
+    this.xhr = null;
+}
+
 blog.changeContent = function(templateLocation, params){
     let template = this.templates[templateLocation]
     let self = this;
     if(this.content){
-        if(blog.xhr){
-            blog.xhr.abort()
-            blog.xhr = null;
-        }
-        let getUrl = template.api
+        this.abortXhr();
+        let getUrl = template.urlConstructor(params);
         if(getUrl){
-            if(params){
-                getUrl = getUrl + "/" + template.params(params);
-            }
             blog.xhr = $.get(getUrl, function(data){
                 self.content.html(nunjucks.renderString(template.data, template.callback(self, data)));
             })

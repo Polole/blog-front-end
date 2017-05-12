@@ -15,7 +15,7 @@ let blog = makeIterable({})
 
 blog.API_URL = "http://localhost:5000"
 blog.content = null;
-blog.router = new Navigo("http://localhost/");
+blog.router = new Navigo(window.location.origin + "/");
 blog.loginStatus = false;
 blog.xhr = false;
 blog.createTemplateSkeleton = function(templateLocation, apiLocation){
@@ -31,6 +31,76 @@ blog.createTemplateSkeleton = function(templateLocation, apiLocation){
     };
     return object
 };
+
+blog.getRestOfTemplates = function(){
+    let self = this;
+    for(let template of this.templates){
+        if(template.location != blog.firstTemplate){
+            $.get(template.location, function(data){
+                template.data = data;
+            });
+        };
+    };
+};
+
+blog.getFirstTemplate = function(){
+    let self = this;
+    let templateLocation = null;
+    for(var regex in this.regexMap){
+        if(!this.regexMap.hasOwnProperty(regex)) continue;
+        let regexp = new RegExp(regex);
+        if(regexp.test(window.location.pathname)){
+            templateLocation = this.regexMap[regex];
+        }
+    }
+    if(!templateLocation){
+        templateLocation = window.location.pathname;
+    }
+    let template = this.templates[templateLocation]
+    if(template){
+        blog.firstTemplate = template.location;
+        $.get(template.location, function(data){
+            template.data = data
+            self.router.resume();
+            self.router.navigate(window.location.pathname);
+        });
+    } else {
+        self.router.resume();
+        self.router.navigate(window.location.pathname);
+    }
+};
+
+blog.abortXhr = function(){
+    this.xhr && this.xhr.abort();
+    this.xhr = null;
+}
+
+blog.changeContent = function(templateLocation, params){
+    let template = this.templates[templateLocation]
+    let self = this;
+    if(this.content){
+        this.abortXhr();
+        let getUrl = template.urlConstructor(params);
+        if(getUrl){
+            blog.xhr = $.get(getUrl, function(data){
+                self.content.html(nunjucks.renderString(template.data, template.callback(self, data)));
+            })
+        } else {
+            self.content.html(nunjucks.renderString(template.data, template.callback(self)))
+        }
+    } else {
+        throw Error("Content did not exist at this time.");
+    }
+}
+
+blog.initializeRoutes = function(){
+    let self = this;
+    this.router.notFound(function(){
+        self.content.html("Not found!");
+    })
+    this.router.on(this.routes).resolve();
+};
+
 (function(blog){
     let indexTemplate = blog.createTemplateSkeleton(
         "index.html",
@@ -72,44 +142,6 @@ blog.createTemplateSkeleton = function(templateLocation, apiLocation){
     })
 })(blog);
 
-blog.getRestOfTemplates = function(){
-    let self = this;
-    for(let template of this.templates){
-        if(template.location != blog.firstTemplate){
-            $.get(template.location, function(data){
-                template.data = data;
-            });
-        };
-    };
-};
-
-blog.getFirstTemplate = function(){
-    let self = this;
-    let templateLocation = null;
-    for(var regex in this.regexMap){
-        if(!this.regexMap.hasOwnProperty(regex)) continue;
-        let regexp = new RegExp(regex);
-        if(regexp.test(window.location.pathname)){
-            templateLocation = this.regexMap[regex];
-        }
-    }
-    if(!templateLocation){
-        templateLocation = window.location.pathname;
-    }
-    let template = this.templates[templateLocation]
-    if(template){
-        blog.firstTemplate = template.location;
-        $.get(template.location, function(data){
-            template.data = data
-            self.router.resume();
-            self.router.navigate(window.location.pathname);
-        });
-    } else {
-        self.router.resume();
-        self.router.navigate(window.location.pathname);
-    }
-};
-
 blog.routes = {
     "/":{
         as: 'index',
@@ -129,37 +161,6 @@ blog.routes = {
             blog.changeContent("/posts/create");
         }
     }
-}
-
-blog.abortXhr = function(){
-    this.xhr && this.xhr.abort();
-    this.xhr = null;
-}
-
-blog.changeContent = function(templateLocation, params){
-    let template = this.templates[templateLocation]
-    let self = this;
-    if(this.content){
-        this.abortXhr();
-        let getUrl = template.urlConstructor(params);
-        if(getUrl){
-            blog.xhr = $.get(getUrl, function(data){
-                self.content.html(nunjucks.renderString(template.data, template.callback(self, data)));
-            })
-        } else {
-            self.content.html(nunjucks.renderString(template.data, template.callback(self)))
-        }
-    } else {
-        throw Error("Content did not exist at this time.");
-    }
-}
-
-blog.initializeRoutes = function(){
-    let self = this;
-    this.router.notFound(function(){
-        self.content.html("Not found!");
-    })
-    this.router.on(this.routes).resolve();
 }
 
 $(document).ready(function(){

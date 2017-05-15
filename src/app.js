@@ -18,6 +18,7 @@ blog.content = null;
 blog.router = new Navigo("http://localhost/");
 blog.loginStatus = false;
 blog.xhr = false;
+blog.missingTemplate = null;
 blog.createTemplateSkeleton = function(templateLocation, apiLocation){
     let object = {
         "data": null,
@@ -72,15 +73,42 @@ blog.createTemplateSkeleton = function(templateLocation, apiLocation){
     })
 })(blog);
 
+blog.routes = {
+    "/":{
+        as: 'index',
+        uses: function(){
+            blog.changeContent("/");
+        }
+    },
+    "/post/:id": {
+        as: 'posts.view',
+        uses: function(params){
+            blog.changeContent("/post", params)
+        }
+    },
+    "/posts/create":{
+        as: 'posts.create',
+        uses: function(){
+            blog.changeContent("/posts/create");
+        }
+    }
+}
+
 blog.getRestOfTemplates = function(){
     let self = this;
-    for(let template of this.templates){
+    for(let property in this.templates){
+        if(!this.templates.hasOwnProperty(property)) continue;
+        let template = this.templates[property];
         if(template.location != blog.firstTemplate){
             $.get(template.location, function(data){
                 template.data = data;
+                if(template.location == self.missingTemplate.location){
+                    self.changeContent(property, self.missingTemplate.params);
+                    self.missingTemplate = false;
+                }
             });
         };
-    };
+    }
 };
 
 blog.getFirstTemplate = function(){
@@ -110,49 +138,34 @@ blog.getFirstTemplate = function(){
     }
 };
 
-blog.routes = {
-    "/":{
-        as: 'index',
-        uses: function(){
-            blog.changeContent("/");
-        }
-    },
-    "/post/:id": {
-        as: 'posts.view',
-        uses: function(params){
-            blog.changeContent("/post", params)
-        }
-    },
-    "/posts/create":{
-        as: 'posts.create',
-        uses: function(){
-            blog.changeContent("/posts/create");
-        }
-    }
-}
-
 blog.abortXhr = function(){
     this.xhr && this.xhr.abort();
     this.xhr = null;
 }
 
 blog.changeContent = function(templateLocation, params){
-    let template = this.templates[templateLocation]
+    let template = this.templates[templateLocation];
     let self = this;
-    if(this.content){
+    if(template.data){
         this.abortXhr();
         let getUrl = template.urlConstructor(params);
         if(getUrl){
             blog.xhr = $.get(getUrl, function(data){
                 self.content.html(nunjucks.renderString(template.data, template.callback(self, data)));
-            })
+            });
         } else {
-            self.content.html(nunjucks.renderString(template.data, template.callback(self)))
-        }
+            self.content.html(nunjucks.renderString(template.data, template.callback(self)));
+        };
     } else {
-        throw Error("Content did not exist at this time.");
-    }
-}
+        this.missingTemplate = {
+            "location": template.location,
+            "params": null
+        };
+        if(params){
+            this.missingTemplate["params"] = params;
+        };
+    };
+};
 
 blog.initializeRoutes = function(){
     let self = this;

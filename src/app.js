@@ -13,7 +13,7 @@ let makeIterable = function(object){
 
 let blog = makeIterable({})
 
-blog.API_URL = "http://localhost:5000"
+blog.API_URL = "http://localhost:5000";
 blog.content = null;
 blog.router = new Navigo(window.location.origin + "/");
 blog.loginStatus = false;
@@ -33,27 +33,6 @@ blog.createTemplateSkeleton = function(templateLocation, apiLocation){
     return object
 };
 
-blog.routes = {
-    "/":{
-        as: 'index',
-        uses: function(){
-            blog.changeContent("/");
-        }
-    },
-    "/post/:id": {
-        as: 'posts.view',
-        uses: function(params){
-            blog.changeContent("/post", params)
-        }
-    },
-    "/posts/create":{
-        as: 'posts.create',
-        uses: function(){
-            blog.changeContent("/posts/create");
-        }
-    }
-}
-
 blog.getRestOfTemplates = function(){
     let self = this;
     for(let property in this.templates){
@@ -62,9 +41,11 @@ blog.getRestOfTemplates = function(){
         if(template.location != blog.firstTemplate){
             $.get(template.location, function(data){
                 template.data = data;
-                if(template.location == self.missingTemplate.location){
-                    self.changeContent(property, self.missingTemplate.params);
-                    self.missingTemplate = false;
+                if(self.missingTemplate){
+                    if(template.location == self.missingTemplate.location){
+                        self.changeContent(property, self.missingTemplate.params);
+                        self.missingTemplate = false;
+                    }
                 }
             });
         };

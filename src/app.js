@@ -70,12 +70,10 @@ blog.getFirstTemplate = function(){
         blog.firstTemplate = template.location;
         $.get(template.location, function(data){
             template.data = data
-            self.router.resume();
-            self.router.navigate(window.location.pathname);
+            self.initializeRoutes();
         });
     } else {
-        self.router.resume();
-        self.router.navigate(window.location.pathname);
+        self.initializeRoutes();
     }
 };
 
@@ -181,8 +179,6 @@ blog.routes = {
 $(document).ready(function(){
     nunjucks.configure({"autoescape": true})
     blog.content = $('#content');
-    blog.router.pause();
-    blog.initializeRoutes();
     blog.getFirstTemplate();
     blog.getRestOfTemplates();
 })

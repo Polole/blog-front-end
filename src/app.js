@@ -15,7 +15,7 @@ let blog = makeIterable({})
 
 blog.API_URL = "http://localhost:5000"
 blog.content = null;
-blog.router = new Navigo("http://localhost/");
+blog.router = new Navigo(window.location.origin + "/");
 blog.loginStatus = false;
 blog.xhr = false;
 blog.missingTemplate = null;
@@ -32,46 +32,6 @@ blog.createTemplateSkeleton = function(templateLocation, apiLocation){
     };
     return object
 };
-(function(blog){
-    let indexTemplate = blog.createTemplateSkeleton(
-        "index.html",
-        "/"
-    );
-    indexTemplate.callback = function(blog, object){
-        return {
-            "posts": object
-        };
-    };
-    let postTemplate = blog.createTemplateSkeleton(
-        "posts.html",
-        "/post"
-    )
-    postTemplate.callback = function(blog, object){
-        return {
-            "post": object
-        }
-    }
-    postTemplate.urlConstructor = function(params){
-        return this.api + "/" + params.id;
-    }
-    let createPostsTemplate = blog.createTemplateSkeleton(
-        "create_posts.html",
-        null
-    );
-    createPostsTemplate.callback = function(blog){
-        return {
-            "loggedIn": blog.loginStatus
-        };
-    };
-    blog.templates = makeIterable({
-        "/": indexTemplate,
-        "/post": postTemplate,
-        "/posts/create": createPostsTemplate
-    });
-    blog.regexMap = makeIterable({
-        "/post/.+": "/post"
-    })
-})(blog);
 
 blog.routes = {
     "/":{
@@ -173,6 +133,68 @@ blog.initializeRoutes = function(){
         self.content.html("Not found!");
     })
     this.router.on(this.routes).resolve();
+};
+
+(function(blog){
+    let indexTemplate = blog.createTemplateSkeleton(
+        "index.html",
+        "/"
+    );
+    indexTemplate.callback = function(blog, object){
+        return {
+            "posts": object
+        };
+    };
+    let postTemplate = blog.createTemplateSkeleton(
+        "posts.html",
+        "/post"
+    )
+    postTemplate.callback = function(blog, object){
+        return {
+            "post": object
+        }
+    }
+    postTemplate.urlConstructor = function(params){
+        return this.api + "/" + params.id;
+    }
+    let createPostsTemplate = blog.createTemplateSkeleton(
+        "create_posts.html",
+        null
+    );
+    createPostsTemplate.callback = function(blog){
+        return {
+            "loggedIn": blog.loginStatus
+        };
+    };
+    blog.templates = makeIterable({
+        "/": indexTemplate,
+        "/post": postTemplate,
+        "/posts/create": createPostsTemplate
+    });
+    blog.regexMap = makeIterable({
+        "/post/.+": "/post"
+    })
+})(blog);
+
+blog.routes = {
+    "/":{
+        as: 'index',
+        uses: function(){
+            blog.changeContent("/");
+        }
+    },
+    "/post/:id": {
+        as: 'posts.view',
+        uses: function(params){
+            blog.changeContent("/post", params)
+        }
+    },
+    "/posts/create":{
+        as: 'posts.create',
+        uses: function(){
+            blog.changeContent("/posts/create");
+        }
+    }
 }
 
 $(document).ready(function(){

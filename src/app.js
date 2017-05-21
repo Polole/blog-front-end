@@ -19,13 +19,15 @@ blog.router = new Navigo(window.location.origin + "/");
 blog.loginStatus = false;
 blog.xhr = false;
 blog.missingTemplate = null;
-blog.createTemplateSkeleton = function(templateLocation, apiLocation){
+blog.createTemplateSkeleton = function(templateLocation, apiLocation, requestMethod){
     let object = {
         "data": null,
         "location": "/templates/" + templateLocation,
         "api": null,
         "urlConstructor": function(params){ return this.api },
-        "callback": function(blog){ return {} }
+        "callback": function(blog){ return {} },
+        "htmlInit": function(content){ },
+        "requestMethod": requestMethod ? requestMethod : "GET"
     };
     if(apiLocation){
         object["api"] = this.API_URL + apiLocation;
@@ -82,18 +84,27 @@ blog.abortXhr = function(){
     this.xhr = null;
 }
 
+blog.doRender = function(template, data){
+    if(data){
+        this.content.html(nunjucks.renderString(template.data, template.callback(this, data)))
+    } else {
+        this.content.html(nunjucks.renderString(template.data, template.callback(this)))
+    }
+    template.htmlInit(this.content)
+}
+
 blog.changeContent = function(templateLocation, params){
     let template = this.templates[templateLocation];
     let self = this;
     if(template.data){
         this.abortXhr();
         let getUrl = template.urlConstructor(params);
-        if(getUrl){
-            blog.xhr = $.get(getUrl, function(data){
-                self.content.html(nunjucks.renderString(template.data, template.callback(self, data)));
+        if(getUrl && template.requestMethod == "GET"){
+            this.xhr = $.get(getUrl, function(data){
+                self.doRender(template, data)
             });
         } else {
-            self.content.html(nunjucks.renderString(template.data, template.callback(self)));
+            this.doRender(template)
         };
     } else {
         this.missingTemplate = {
@@ -138,13 +149,33 @@ blog.initializeRoutes = function(){
     }
     let createPostsTemplate = blog.createTemplateSkeleton(
         "create_posts.html",
-        null
+        "/post",
+        "POST"
     );
     createPostsTemplate.callback = function(blog){
         return {
             "loggedIn": blog.loginStatus
         };
     };
+    createPostsTemplate.htmlInit = function(content){
+        let self = this;
+        if(content.find('#editor').length){
+            CKEDITOR.replace('editor')
+            content.find('#submit').click(function(event){
+                let data = JSON.stringify({
+                    "title": "Some Title",
+                    "content": CKEDITOR.instances.editor.getData()
+                })
+                var a = $.ajax({
+                    "contentType": "application/json",
+                    "type": "POST",
+                    "url": self.api,
+                    "data": data,
+                    "dataType": "json"
+                })
+            })
+        }
+    }
     blog.templates = makeIterable({
         "/": indexTemplate,
         "/post": postTemplate,

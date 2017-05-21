@@ -2,7 +2,7 @@
 	{% for post in posts %}
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				{{post.title}}
+				<a href=/post/{{post.id}} data-navigo>{{post.title}}</a>
 			</div>
 			<div class="panel-body">
 				{{post.content | safe}}

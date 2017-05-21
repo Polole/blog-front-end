@@ -26,7 +26,7 @@ blog.createTemplateSkeleton = function(templateLocation, apiLocation, requestMet
         "api": null,
         "urlConstructor": function(params){ return this.api },
         "callback": function(blog){ return {} },
-        "htmlInit": function(content){ },
+        "htmlInit": function(blog){ return true; },
         "requestMethod": requestMethod ? requestMethod : "GET"
     };
     if(apiLocation){
@@ -90,12 +90,14 @@ blog.doRender = function(template, data){
     } else {
         this.content.html(nunjucks.renderString(template.data, template.callback(this)))
     }
-    template.htmlInit(this.content)
+    template.htmlInit(this)
+    this.content.fadeIn();
 }
 
 blog.changeContent = function(templateLocation, params){
     let template = this.templates[templateLocation];
     let self = this;
+    this.content.hide();
     if(template.data){
         this.abortXhr();
         let getUrl = template.urlConstructor(params);
@@ -135,6 +137,9 @@ blog.initializeRoutes = function(){
             "posts": object
         };
     };
+    indexTemplate.htmlInit = function(blog){
+        blog.router.updatePageLinks();
+    }
     let postTemplate = blog.createTemplateSkeleton(
         "posts.html",
         "/post"
@@ -157,8 +162,9 @@ blog.initializeRoutes = function(){
             "loggedIn": blog.loginStatus
         };
     };
-    createPostsTemplate.htmlInit = function(content){
+    createPostsTemplate.htmlInit = function(blog){
         let self = this;
+        let content = blog.content;
         if(content.find('#editor').length){
             CKEDITOR.replace('editor')
             content.find('#submit').click(function(event){

@@ -19,7 +19,10 @@ blog.router = new Navigo(window.location.origin + "/");
 blog.loginStatus = false;
 blog.xhr = false;
 blog.missingTemplate = null;
-blog.createTemplateSkeleton = function(templateLocation, apiLocation, requestMethod){
+blog.createTemplateSkeleton = function(templateLocation, options){
+    if(!options){
+        options = {};
+    }
     let object = {
         "data": null,
         "location": "/templates/" + templateLocation,
@@ -27,11 +30,15 @@ blog.createTemplateSkeleton = function(templateLocation, apiLocation, requestMet
         "urlConstructor": function(params){ return this.api },
         "callback": function(blog){ return {} },
         "htmlInit": function(blog){ blog.router.updatePageLinks(); return true; },
-        "requestMethod": requestMethod ? requestMethod : "GET"
+        "requestMethod": options.requestMethod ? options.requestMethod : "GET",
+        "settings": {}
     };
-    if(apiLocation){
-        object["api"] = this.API_URL + apiLocation;
+    if(options.apiLocation){
+        object["api"] = this.API_URL + options.apiLocation;
     };
+    if(options.settings){
+        object["settings"] = options.settings
+    }
     return object
 };
 
@@ -128,18 +135,24 @@ blog.initializeRoutes = function(){
 };
 
 (function(blog){
+    let indexSettings = {
+        "apiLocation": "/"
+    }
     let indexTemplate = blog.createTemplateSkeleton(
         "index.html",
-        "/"
+        indexSettings
     );
     indexTemplate.callback = function(blog, object){
         return {
             "posts": object
         };
     };
+    let postSettings = {
+        "apiLocation": "/post"
+    }
     let postTemplate = blog.createTemplateSkeleton(
         "posts.html",
-        "/post"
+        postSettings
     )
     postTemplate.callback = function(blog, object){
         return {
@@ -149,10 +162,13 @@ blog.initializeRoutes = function(){
     postTemplate.urlConstructor = function(params){
         return this.api + "/" + params.id;
     }
+    let createPostsSettings = {
+        "apiLocation": "/post",
+        "requestMethod": "POST"
+    }
     let createPostsTemplate = blog.createTemplateSkeleton(
         "create_posts.html",
-        "/post",
-        "POST"
+        createPostSettings
     );
     createPostsTemplate.callback = function(blog){
         return {

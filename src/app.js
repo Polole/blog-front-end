@@ -26,7 +26,7 @@ blog.createTemplateSkeleton = function(templateLocation, apiLocation, requestMet
         "api": null,
         "urlConstructor": function(params){ return this.api },
         "callback": function(blog){ return {} },
-        "htmlInit": function(blog){ return true; },
+        "htmlInit": function(blog){ blog.router.updatePageLinks(); return true; },
         "requestMethod": requestMethod ? requestMethod : "GET"
     };
     if(apiLocation){
@@ -137,9 +137,6 @@ blog.initializeRoutes = function(){
             "posts": object
         };
     };
-    indexTemplate.htmlInit = function(blog){
-        blog.router.updatePageLinks();
-    }
     let postTemplate = blog.createTemplateSkeleton(
         "posts.html",
         "/post"
@@ -181,6 +178,7 @@ blog.initializeRoutes = function(){
                 })
             })
         }
+        blog.router.updatePageLinks();
     }
     blog.templates = makeIterable({
         "/": indexTemplate,

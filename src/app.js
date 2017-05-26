@@ -185,9 +185,9 @@ blog.initializeRoutes = function(){
                     "title": "Some Title",
                     "content": CKEDITOR.instances.editor.getData()
                 })
-                var a = $.ajax({
+                $.ajax({
                     "contentType": "application/json",
-                    "type": "POST",
+                    "type": self.requestMethod,
                     "url": self.api,
                     "data": data,
                     "dataType": "json"

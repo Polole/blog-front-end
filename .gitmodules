@@ -1,0 +1,3 @@
+[submodule "templateify-js"]
+	path = templateify-js
+	url = https://github.com/jakegt1/templateify-js.git

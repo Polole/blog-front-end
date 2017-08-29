@@ -47,7 +47,7 @@ let app = new Templateify("http://localhost:5000", "/templates", "content");
                     $.ajax({
                         "contentType": "application/json",
                         "type": self.requestMethod,
-                        "url": self.api,
+                        "url": app.url(self.apiLocation),
                         "data": data,
                         "dataType": "json"
                     })

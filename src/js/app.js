@@ -56,9 +56,9 @@ let app = new Templateify("http://localhost:5000", "/templates", "content");
                 "loggedIn": templateify.auth.user ? true : false
             }
         },
-        htmlInit: function(blog){
+        htmlInit: function(templateify){
             let self = this;
-            let content = blog.content;
+            let content = templateify.content;
             if(content.find('#editor').length){
                 CKEDITOR.replace('editor')
                 content.find('#submit').click(function(event){
@@ -72,13 +72,23 @@ let app = new Templateify("http://localhost:5000", "/templates", "content");
                         "url": app.url(self.apiLocation),
                         "data": data,
                         "dataType": "json",
-                        "beforeSend": function(xhr){xhr.setRequestHeader("Authorization", "JWT " + blog.auth.token)}
+                        "beforeSend": function(xhr){xhr.setRequestHeader("Authorization", "JWT " + templateify.auth.token)}
                     })
                 })
             }
-            blog.router.updatePageLinks()
+            templateify.router.updatePageLinks()
         }
     }
     app.addTemplate("createPostView", new TemplateifyTemplate("/posts/create", "create_posts.html", createPostSettings))
+
+    let loginSettings = {
+        htmlInit: function(templateify){
+            $('#login').click(function(){
+                templateify.auth.login($('#username').val(), $('#password').val());
+            })
+            templateify.router.updatePageLinks();
+        }
+    }
+    app.addTemplate("loginView", new TemplateifyTemplate("/login", "login.html", loginSettings))
 })();
 

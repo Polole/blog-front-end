@@ -2,6 +2,29 @@
 let app = new Templateify("http://localhost:5000", "/templates", "content");
 
 (function(){
+    class JWTAuth extends TemplateifyAuth {
+
+        constructor(url, callbackUrl){
+            super(url, callbackUrl)
+        }
+
+        loginCallback(username, password){
+            return $.ajax({
+                "contentType": "application/json",
+                "type": "POST",
+                "url": this.url,
+                "data": JSON.stringify({"username": username, "password": password}),
+                "dateType": "json"
+            })
+        }
+
+        get token() {return this.user.access_token}
+
+    }
+
+    let jwtAuth = new JWTAuth(app.url("/auth"), "/")
+    app.auth = jwtAuth;
+
     let indexSettings = {
         apiLocation: "/",
         callback: function(templateify, data){
@@ -30,7 +53,7 @@ let app = new Templateify("http://localhost:5000", "/templates", "content");
         requestMethod: "POST",
         callback: function(templateify){
             return {
-                "loggedIn": templateify.loginStatus
+                "loggedIn": templateify.auth.user ? true : false
             }
         },
         htmlInit: function(blog){
@@ -48,7 +71,8 @@ let app = new Templateify("http://localhost:5000", "/templates", "content");
                         "type": self.requestMethod,
                         "url": app.url(self.apiLocation),
                         "data": data,
-                        "dataType": "json"
+                        "dataType": "json",
+                        "beforeSend": function(xhr){xhr.setRequestHeader("Authorization", "JWT " + blog.auth.token)}
                     })
                 })
             }

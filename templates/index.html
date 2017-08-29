@@ -1,12 +1,12 @@
-<div class="list-group">
+<ul>
 	{% for post in posts %}
-		<div class="panel panel-default">
+		<li class="panel panel-default">
 			<div class="panel-heading">
 				<a href=/post/{{post.id}} data-navigo>{{post.title}}</a>
 			</div>
-			<div class="panel-body">
+			<div class="panel-block">
 				{{post.content | safe}}
 			</div>
-		</div>
+		</li>
 	{% endfor %}
-</div>
+</ul>

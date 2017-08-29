@@ -1,5 +1,4 @@
 "use strict";
-
 let app = new Templateify("http://localhost:5000", "/templates", "content");
 
 (function(){

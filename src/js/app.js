@@ -18,6 +18,13 @@ let app = new Templateify("http://localhost:5000", "/templates", "content");
             })
         }
 
+        authHeaders(){
+            let self = this;
+            return function(xhr){
+                xhr.setRequestHeader("Authorization", `JWT ${self.token}`)
+            }
+        }
+
         get token() {return this.user.access_token}
 
     }
@@ -66,14 +73,11 @@ let app = new Templateify("http://localhost:5000", "/templates", "content");
                         "title": "Some Title",
                         "content": CKEDITOR.instances.editor.getData()
                     })
-                    $.ajax({
-                        "contentType": "application/json",
-                        "type": self.requestMethod,
-                        "url": app.url(self.apiLocation),
-                        "data": data,
-                        "dataType": "json",
-                        "beforeSend": function(xhr){xhr.setRequestHeader("Authorization", "JWT " + templateify.auth.token)}
-                    })
+                    let requestOptions = {
+                        data: data,
+                        type: self.requestMethod
+                    }
+                    templateify.requestWithAuth(self.apiLocation, requestOptions)
                 })
             }
             templateify.router.updatePageLinks()

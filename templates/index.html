@@ -1,3 +1,6 @@
+{% extends parentTemplate %}
+
+{% block content %}
 <ul>
 	{% for post in posts %}
 		<article class="message">
@@ -10,3 +13,4 @@
 		</article>
 	{% endfor %}
 </ul>
+{% endblock %}

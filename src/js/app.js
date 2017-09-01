@@ -29,6 +29,9 @@ let app = new Templateify("http://localhost:5000", "/templates", "content");
 
     }
 
+    let parentTemplate = new TemplateifyTemplate(null, "main.html", {})
+    app.parentTemplate = parentTemplate;
+
     let jwtAuth = new JWTAuth(app.url("/auth"), "/")
     app.auth = jwtAuth;
 

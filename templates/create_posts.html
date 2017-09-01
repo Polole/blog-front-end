@@ -1,6 +1,10 @@
-{% if loggedIn %}
-	<textarea id="editor"></textarea>
-	<div class="button" id="submit">Create Post</div>
-{% else %}
-    <p>Logged out!</p>
-{% endif %}
+{% extends parentTemplate %}
+
+{% block content %}
+	{% if loggedIn %}
+		<textarea id="editor"></textarea>
+		<div class="button" id="submit">Create Post</div>
+	{% else %}
+		<p>Logged out!</p>
+	{% endif %}
+{% endblock %}

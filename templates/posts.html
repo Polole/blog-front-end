@@ -1,3 +1,6 @@
+{% extends parentTemplate %}
+
+{% block content %}
 <article class="message">
 	<div class="message-header">
 		{{post.title}} with ID: {{post.id}}
@@ -6,3 +9,5 @@
 		{{post.content | safe}}
 	</div>
 </article>
+{% endblock %}
+

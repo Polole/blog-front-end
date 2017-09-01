@@ -1,0 +1,35 @@
+{% block nav %}
+<nav class="navbar">
+	<div class="container">
+		<div class="navbar-brand">
+			<a class="navbar-item" data-navigo href="/"><img src=https://i.imgur.com/JfDBtzi.png alt="blooded"></a>
+
+			<div class="navbar-burger burger" data-target="nav-menu">
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+		</div>
+
+		<div class="navbar-menu" id="nav-menu">
+			<div class="navbar-start">
+				<a class="navbar-item" data-navigo href="/">Home</a>
+
+				<a class="navbar-item" data-navigo href="/posts/create">Create Post</a>
+			</div>
+		</div>
+
+		<div class="navbar-end">
+			<a class="navbar-item" data-navigo href="/login">Login</a>
+		</div>
+
+	</div>
+</nav>
+{% endblock %}
+
+<section class="section">
+	<div class="container">
+		{% block content %}
+		{% endblock %}
+	</div>
+</section>

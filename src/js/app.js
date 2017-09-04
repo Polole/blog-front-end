@@ -83,7 +83,6 @@ let app = new Templateify("http://localhost:5000", "/templates", "content");
                     templateify.requestWithAuth(self.apiLocation, requestOptions)
                 })
             }
-            templateify.router.updatePageLinks()
         }
     }
     app.addTemplate("createPostView", new TemplateifyTemplate("/posts/create", "create_posts.html", createPostSettings))
@@ -93,7 +92,6 @@ let app = new Templateify("http://localhost:5000", "/templates", "content");
             $('#login').click(function(){
                 templateify.auth.login($('#username').val(), $('#password').val());
             })
-            templateify.router.updatePageLinks();
         }
     }
     app.addTemplate("loginView", new TemplateifyTemplate("/login", "login.html", loginSettings))

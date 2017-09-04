@@ -1,7 +1,7 @@
 {% extends parentTemplate %}
 
 {% block content %}
-	{% if loggedIn %}
+	{% if user %}
 		<textarea id="editor"></textarea>
 		<div class="button" id="submit">Create Post</div>
 	{% else %}

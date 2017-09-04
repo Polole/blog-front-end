@@ -61,11 +61,6 @@ let app = new Templateify("http://localhost:5000", "/templates", "content");
     let createPostSettings = {
         apiLocation: "/post",
         requestMethod: "POST",
-        callback: function(templateify){
-            return {
-                "loggedIn": templateify.auth.user ? true : false
-            }
-        },
         htmlInit: function(templateify){
             let self = this;
             let content = templateify.content;

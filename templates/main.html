@@ -20,7 +20,11 @@
 		</div>
 
 		<div class="navbar-end">
-			<a class="navbar-item" data-navigo href="/login">Login</a>
+			{% if user %}
+				<a class="navbar-item" data-navigo href="/logout">Logout</a>
+			{% else %}
+				<a class="navbar-item" data-navigo href="/login">Login</a>
+			{% endif %}
 		</div>
 
 	</div>

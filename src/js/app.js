@@ -1,5 +1,5 @@
 "use strict";
-let app = new Templateify("http://localhost:5000", "/templates", "content");
+let app = new Templateify("http://localhost:3000", "/templates", "content");
 
 (function(){
     class JWTAuth extends TemplateifyAuth {
@@ -8,12 +8,12 @@ let app = new Templateify("http://localhost:5000", "/templates", "content");
             super(url, callbackUrl)
         }
 
-        loginCallback(username, password){
+        loginCallback(email, password){
             return $.ajax({
                 "contentType": "application/json",
                 "type": "POST",
                 "url": this.url,
-                "data": JSON.stringify({"username": username, "password": password}),
+                "data": JSON.stringify({"email": email, "password": password}),
                 "dateType": "json"
             })
         }
@@ -25,18 +25,18 @@ let app = new Templateify("http://localhost:5000", "/templates", "content");
             }
         }
 
-        get token() {return this.user.access_token}
+        get token() {return this.user.auth_token}
 
     }
 
     let parentTemplate = new TemplateifyTemplate(null, "main.html", {})
     app.parentTemplate = parentTemplate;
 
-    let jwtAuth = new JWTAuth(app.url("/auth"), "/")
+    let jwtAuth = new JWTAuth(app.url("/auth/login"), "/")
     app.auth = jwtAuth;
 
     let indexSettings = {
-        apiLocation: "/",
+        apiLocation: "/posts",
         callback: function(templateify, data){
             return {
                 "posts": data
@@ -46,7 +46,7 @@ let app = new Templateify("http://localhost:5000", "/templates", "content");
     app.addTemplate("index", new TemplateifyTemplate("/", "index.html", indexSettings))
 
     let postSettings = {
-        apiLocation: "/post",
+        apiLocation: "/posts",
         callback: function(templateify, data){
             return {
                 "post": data
@@ -59,7 +59,7 @@ let app = new Templateify("http://localhost:5000", "/templates", "content");
     app.addTemplate("postView", new TemplateifyTemplate("/post/:id", "posts.html", postSettings))
 
     let createPostSettings = {
-        apiLocation: "/post",
+        apiLocation: "/posts",
         requestMethod: "POST",
         htmlInit: function(templateify){
             let self = this;

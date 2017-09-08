@@ -34,6 +34,12 @@
 
 <section class="section">
 	<div class="container">
+		{% if error %}
+			<div class="notification is-danger">
+				<p>Sorry, there's been a mistake.</p>
+				<p>This was the error: {{error}}</p>
+			</div>
+		{% endif %}
 		{% block content %}
 		{% endblock %}
 	</div>

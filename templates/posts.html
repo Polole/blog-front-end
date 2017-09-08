@@ -1,13 +1,15 @@
 {% extends parentTemplate %}
 
 {% block content %}
-<article class="message">
-	<div class="message-header">
-		{{post.title}} with ID: {{post.id}}
-	</div>
-	<div class="message-body">
-		{{post.content | safe}}
-	</div>
-</article>
+	{% if post %}
+		<article class="message">
+			<div class="message-header">
+				{{post.title}} with ID: {{post.id}}
+			</div>
+			<div class="message-body">
+				{{post.content | safe}}
+			</div>
+		</article>
+	{% endif %}
 {% endblock %}
 

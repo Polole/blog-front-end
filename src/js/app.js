@@ -87,7 +87,9 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
     let loginSettings = {
         htmlInit: function(templateify){
             $('#login').click(function(){
-                templateify.auth.login($('#username').val(), $('#password').val());
+                templateify.auth.login($('#username').val(), $('#password').val()).then(function(){
+                    templateify.navigateByViewName("index")
+                })
             })
         }
     }
@@ -96,7 +98,7 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
     let logoutSettings = {
         htmlInit: function(templateify){
             templateify.auth.logout();
-            templateify.router.navigate("/");
+            templateify.navigateByViewName("index")
         }
     }
     app.addTemplate("logoutView", new TemplateifyTemplate("/logout", null, logoutSettings))

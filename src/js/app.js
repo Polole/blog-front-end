@@ -77,6 +77,8 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
                     }
                     templateify.requestWithAuth(self.apiLocation, requestOptions).then(function(data){
                         templateify.navigateByViewName("postView", {"id": data.id})
+                    }).fail(function(data, textStatus, errorThrown){
+                        templateify.doFailRender(self, data, textStatus, errorThrown)
                     })
                 })
             }
@@ -86,9 +88,12 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
 
     let loginSettings = {
         htmlInit: function(templateify){
+            let self = this;
             $('#login').click(function(){
                 templateify.auth.login($('#username').val(), $('#password').val()).then(function(){
                     templateify.navigateByViewName("index")
+                }).fail(function(data, textStatus, errorThrown){
+                    templateify.doFailRender(self, data, textStatus, errorThrown)
                 })
             })
         }

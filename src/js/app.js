@@ -25,7 +25,7 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
             }
         }
 
-        get token() {return this.user.auth_token}
+        get token() {return this.data && this.data.auth_token}
 
     }
 
@@ -75,7 +75,9 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
                         data: data,
                         type: self.requestMethod
                     }
-                    templateify.requestWithAuth(self.apiLocation, requestOptions)
+                    templateify.requestWithAuth(self.apiLocation, requestOptions).then(function(data){
+                        templateify.navigateByViewName("postView", {"id": data.id})
+                    })
                 })
             }
         }
@@ -90,5 +92,13 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
         }
     }
     app.addTemplate("loginView", new TemplateifyTemplate("/login", "login.html", loginSettings))
+
+    let logoutSettings = {
+        htmlInit: function(templateify){
+            templateify.auth.logout();
+            templateify.router.navigate("/");
+        }
+    }
+    app.addTemplate("logoutView", new TemplateifyTemplate("/logout", null, logoutSettings))
 })();
 

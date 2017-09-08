@@ -21,6 +21,7 @@
 
 		<div class="navbar-end">
 			{% if user %}
+				<span class="navbar-item">{{user.email}}</span>
 				<a class="navbar-item" data-navigo href="/logout">Logout</a>
 			{% else %}
 				<a class="navbar-item" data-navigo href="/login">Login</a>

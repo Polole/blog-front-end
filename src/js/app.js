@@ -44,6 +44,14 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
     }
     app.parentTemplate = new TemplateifyTemplate(null, "main.html",parentSettings)
 
+    app.notFoundFunc = function(){
+        let content = this.content
+        let parentTemplate = this.parentTemplate
+        return function(){
+            content.html(parentTemplate.html.render({"error": "404: Page not found"}))
+        }
+    }
+
     let indexSettings = {
         apiLocation: "/posts",
         callback: function(templateify, data){

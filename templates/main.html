@@ -14,8 +14,9 @@
 		<div class="navbar-menu" id="nav-menu">
 			<div class="navbar-start">
 				<a class="navbar-item" data-navigo href="/">Home</a>
-
-				<a class="navbar-item" data-navigo href="/posts/create">Create Post</a>
+				{% if user %}
+					<a class="navbar-item" data-navigo href="/posts/create">Create Post</a>
+				{% endif %}
 			</div>
 		</div>
 
@@ -36,8 +37,7 @@
 	<div class="container">
 		{% if error %}
 			<div class="notification is-danger">
-				<p>Sorry, there's been a mistake.</p>
-				<p>This was the error: {{error}}</p>
+				<p>{{error}}</p>
 			</div>
 		{% endif %}
 		{% block content %}

@@ -29,11 +29,20 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
 
     }
 
-    let parentTemplate = new TemplateifyTemplate(null, "main.html", {})
-    app.parentTemplate = parentTemplate;
-
     let jwtAuth = new JWTAuth(app.url("/auth/login"), "/")
     app.auth = jwtAuth;
+
+    let parentSettings = {
+        htmlInit: function(templateify){
+            $('.navbar-burger').click(function(){
+                let $this = $(this)
+                let $targ = $('#'+$this.data("target"))
+                $this.toggleClass("is-active")
+                $targ.toggleClass("is-active")
+            })
+        }
+    }
+    app.parentTemplate = new TemplateifyTemplate(null, "main.html",parentSettings)
 
     let indexSettings = {
         apiLocation: "/posts",
@@ -78,7 +87,7 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
                     templateify.requestWithAuth(self.apiLocation, requestOptions).then(function(data){
                         templateify.navigateByViewName("postView", {"id": data.id})
                     }).fail(function(data, textStatus, errorThrown){
-                        templateify.doFailRender(self, data, textStatus, errorThrown)
+                        templateify.doFailRender(self, "Failed to submit post. Are you sure you're correctly logged in? If not, log out then try log in again.")
                     })
                 })
             }
@@ -93,7 +102,7 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
                 templateify.auth.login($('#username').val(), $('#password').val()).then(function(){
                     templateify.navigateByViewName("index")
                 }).fail(function(data, textStatus, errorThrown){
-                    templateify.doFailRender(self, data, textStatus, errorThrown)
+                    templateify.doFailRender(self, "Failed to login. Are you sure your username and password are correct?")
                 })
             })
         }

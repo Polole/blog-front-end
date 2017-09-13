@@ -45,10 +45,11 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
     app.parentTemplate = new TemplateifyTemplate(null, "main.html",parentSettings)
 
     app.notFoundFunc = function(){
+        let self = this;
         let content = this.content
         let parentTemplate = this.parentTemplate
         return function(){
-            content.html(parentTemplate.html.render({"error": "404: Page not found"}))
+            self.doFailRender(parentTemplate, "404: page not found")
         }
     }
 

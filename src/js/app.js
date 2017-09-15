@@ -55,6 +55,14 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
             return {
                 "posts": data
             }
+        },
+        htmlInit: function(templateify){
+            $('article').mouseenter(function(){
+                $(this).toggleClass("is-primary")
+            })
+            $('article').mouseleave(function(){
+                $(this).toggleClass("is-primary")
+            })
         }
     }
     app.addTemplate("index", new TemplateifyTemplate("/", "index.html", indexSettings))

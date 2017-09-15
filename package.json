@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-	"build": "lessc src/style.less > src/style.css"
+	"build": "nunjucks-precompile templates/ > src/js/templates.js"
   },
   "dependencies": {
     "navigo": "4.7.1",

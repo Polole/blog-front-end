@@ -11,6 +11,15 @@
 				{{post.content | safe}}
 			</div>
 		</article>
+	{% else %}
+		<article class="message is-info">
+			<div class="message-body">
+				<p>No posts as of yet..</p>
+				{% if user %}
+					<a href=/posts/create data-navigo>Why not make some?</a>
+				{% endif %}
+			</div>
+		</article>
 	{% endfor %}
 </ul>
 {% endblock %}

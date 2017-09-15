@@ -68,6 +68,20 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
         },
         urlConstructor: function(params){
             return this.apiLocation + "/" + params.id
+        },
+        htmlInit: function(templateify){
+            let params = templateify.currentParams;
+            let self = this;
+            $('#delete').click(function(){
+                let requestOptions = {
+                    requestMethod: "DELETE"
+                }
+                templateify.requestWithAuth(self.urlConstructor(params), requestOptions).then(function(){
+                    templateify.navigateByViewName("index");
+                }).catch(function(){
+                    templateify.doFailRender(self, "Could not delete post. Are you logged in?")
+                })
+            })
         }
     }
     app.addTemplate("postView", new TemplateifyTemplate("/post/:id", "posts.html", postSettings))

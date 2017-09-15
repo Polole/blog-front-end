@@ -2,9 +2,12 @@
 
 {% block content %}
 	{% if post %}
-		<article class="message">
+		<article class="message is-medium">
 			<div class="message-header">
 				{{post.title}} with ID: {{post.id}}
+				{% if user %}
+					<button class="delete is-medium" id="delete"></button>
+				{% endif %}
 			</div>
 			<div class="message-body">
 				{{post.content | safe}}

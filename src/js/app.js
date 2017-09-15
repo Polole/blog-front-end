@@ -46,7 +46,6 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
 
     app.notFoundFunc = function(){
         let self = this;
-        let content = this.content
         let parentTemplate = this.parentTemplate
         return function(){
             self.doFailRender(parentTemplate, "404: page not found")
@@ -81,7 +80,7 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
         requestMethod: "POST",
         htmlInit: function(templateify){
             let self = this;
-            let content = templateify.content;
+            let content = $(templateify.content);
             if(content.find('#editor').length){
                 CKEDITOR.replace('editor')
                 content.find('#submit').click(function(event){

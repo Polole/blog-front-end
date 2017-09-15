@@ -18,11 +18,8 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
             })
         }
 
-        authHeaders(){
-            let self = this;
-            return function(xhr){
-                xhr.setRequestHeader("Authorization", `JWT ${self.token}`)
-            }
+        authHeaders(xhr){
+            xhr.setRequestHeader("Authorization", `JWT ${this.token}`)
         }
 
         get token() {return this.data && this.data.auth_token}
@@ -90,11 +87,11 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
                     })
                     let requestOptions = {
                         data: data,
-                        type: self.requestMethod
+                        requestMethod: self.requestMethod
                     }
                     templateify.requestWithAuth(self.apiLocation, requestOptions).then(function(data){
                         templateify.navigateByViewName("postView", {"id": data.id})
-                    }).fail(function(data, textStatus, errorThrown){
+                    }).catch(function(data, textStatus, errorThrown){
                         templateify.doFailRender(self, "Failed to submit post. Are you sure you're correctly logged in? If not, log out then try log in again.")
                     })
                 })

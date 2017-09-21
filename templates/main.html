@@ -33,6 +33,11 @@
 </nav>
 {% endblock %}
 
+<section class="hero is-primary">
+{% block hero %}
+{% endblock %}
+</section>
+
 <section class="section">
 	<div class="container">
 		{% if error %}
@@ -44,3 +49,11 @@
 		{% endblock %}
 	</div>
 </section>
+
+<footer class="footer">
+	<div class="container">
+		<div class="content has-text-centered">
+			A silly blog made by <a href="https://github.com/jakegt1">Jake Torrance</a>. I think it's kinda a good meme.
+		</div>
+	</div>
+</footer>

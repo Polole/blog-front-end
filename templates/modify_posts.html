@@ -1,0 +1,10 @@
+{% extends "main.html" %}
+
+{% block content %}
+	{% if user %}
+		<textarea id="editor"></textarea>
+		<div class="button" id="submit">{% block action %}{% endblock %}</div>
+	{% else %}
+		<p>Logged out!</p>
+	{% endif %}
+{% endblock %}

@@ -94,33 +94,46 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
     }
     app.addTemplate("postView", new TemplateifyTemplate("/post/:id", "posts.html", postSettings))
 
+    let modifyPostFunction = function(templateify){
+        let self = this;
+        let content = $(templateify.content);
+        if(content.find('#editor').length){
+            CKEDITOR.replace('editor')
+            content.find('#submit').click(function(event){
+                let data = JSON.stringify({
+                    "title": "Some Title",
+                    "content": CKEDITOR.instances.editor.getData()
+                })
+                let requestOptions = {
+                    data: data,
+                    requestMethod: self.requestMethod
+                }
+                templateify.requestWithAuth(self.urlConstructor(templateify.currentParams), requestOptions).then(function(data){
+                    templateify.navigateByViewName("postView", {"id": data.id})
+                }).catch(function(data, textStatus, errorThrown){
+                    templateify.doFailRender(self, "Failed to submit post. Are you sure you're correctly logged in? If not, log out then try log in again.")
+                })
+            })
+        }
+    }
+
+
     let createPostSettings = {
         apiLocation: "/posts",
         requestMethod: "POST",
-        htmlInit: function(templateify){
-            let self = this;
-            let content = $(templateify.content);
-            if(content.find('#editor').length){
-                CKEDITOR.replace('editor')
-                content.find('#submit').click(function(event){
-                    let data = JSON.stringify({
-                        "title": "Some Title",
-                        "content": CKEDITOR.instances.editor.getData()
-                    })
-                    let requestOptions = {
-                        data: data,
-                        requestMethod: self.requestMethod
-                    }
-                    templateify.requestWithAuth(self.apiLocation, requestOptions).then(function(data){
-                        templateify.navigateByViewName("postView", {"id": data.id})
-                    }).catch(function(data, textStatus, errorThrown){
-                        templateify.doFailRender(self, "Failed to submit post. Are you sure you're correctly logged in? If not, log out then try log in again.")
-                    })
-                })
-            }
-        }
+        htmlInit: modifyPostFunction
     }
     app.addTemplate("createPostView", new TemplateifyTemplate("/posts/create", "create_posts.html", createPostSettings))
+
+    let editPostSettings = {
+        apiLocation:"/posts",
+        requestMethod: "PATCH",
+        urlConstructor: function(params){
+            return this.apiLocation + "/" + params.id
+        },
+        htmlInit: modifyPostFunction
+    }
+    app.addTemplate("editPostView", new TemplateifyTemplate("/post/:id/edit", "edit_posts.html", editPostSettings))
 
     let loginSettings = {
         htmlInit: function(templateify){

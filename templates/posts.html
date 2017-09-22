@@ -6,7 +6,10 @@
 			<div class="message-header">
 				{{post.title}} with ID: {{post.id}}
 				{% if user %}
-					<button class="delete is-medium" id="delete"></button>
+					<div class="field is-grouped">
+						<button class="button is-dark" id="edit" data-href="/post/{{post.id}}/edit">Edit</button>
+						<button class="delete is-medium" id="delete"></button>
+					</div>
 				{% endif %}
 			</div>
 			<div class="message-body">

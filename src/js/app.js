@@ -1,5 +1,5 @@
 "use strict";
-let app = new Templateify("http://localhost:3000", "/templates", "content");
+let app = new Templateify("https://memeblog.bloodedguild.me/api", "/templates", "content");
 
 (function(){
     class JWTAuth extends TemplateifyAuth {
@@ -90,7 +90,7 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
     app.addTemplate("postView", new TemplateifyTemplate("/post/:id", "posts.html", postSettings))
 
     let modifyPostFunction = function(requestMethod){
-        function(templateify){
+        return function(templateify){
             let self = this;
             let content = $(templateify.content);
             if(content.find('#editor').length){

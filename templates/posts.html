@@ -4,7 +4,7 @@
 	{% if post %}
 		<article class="message is-primary is-medium">
 			<div class="message-header">
-				{{post.title}} with ID: {{post.id}}
+				{{post.title}} ({{post.id}})
 				{% if user %}
 					<div class="field is-grouped">
 						<button class="button is-dark" id="edit" data-href="/post/{{post.id}}/edit">Edit</button>

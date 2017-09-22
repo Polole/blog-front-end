@@ -1,5 +1,5 @@
 "use strict";
-let app = new Templateify("https://memeblog.bloodedguild.me/api", "/templates", "content");
+let app = new Templateify("http://localhost:3000", "/templates", "content");
 
 (function(){
     class JWTAuth extends TemplateifyAuth {
@@ -81,6 +81,9 @@ let app = new Templateify("https://memeblog.bloodedguild.me/api", "/templates", 
                 }).catch(function(){
                     templateify.doFailRender(self, "Could not delete post. Are you logged in?")
                 })
+            })
+            $('#edit').click(function(){
+                templateify.navigateByViewName("editPostView", params)
             })
         }
     }

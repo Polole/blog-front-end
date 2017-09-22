@@ -1,5 +1,5 @@
 "use strict";
-let app = new Templateify("http://localhost:3000", "/templates", "content");
+let app = new Templateify("https://memeblog.bloodedguild.me/api", "/templates", "content");
 
 (function(){
     class JWTAuth extends TemplateifyAuth {
@@ -55,14 +55,6 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
             return {
                 "posts": data
             }
-        },
-        htmlInit: function(templateify){
-            $('article').mouseenter(function(){
-                $(this).toggleClass("is-primary")
-            })
-            $('article').mouseleave(function(){
-                $(this).toggleClass("is-primary")
-            })
         }
     }
     app.addTemplate("index", new TemplateifyTemplate("/", "index.html", indexSettings))
@@ -157,4 +149,3 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
     }
     app.addTemplate("logoutView", new TemplateifyTemplate("/logout", null, logoutSettings))
 })();
-

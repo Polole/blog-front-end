@@ -95,8 +95,9 @@ let app = new Templateify("http://localhost:3000", "/templates", "content");
         if(content.find('#editor').length){
             CKEDITOR.replace('editor')
             content.find('#submit').click(function(event){
+                let title = $('#title').val() || "Arbitrary Title"
                 let data = JSON.stringify({
-                    "title": "Some Title",
+                    "title": title,
                     "content": CKEDITOR.instances.editor.getData()
                 })
                 let requestOptions = {

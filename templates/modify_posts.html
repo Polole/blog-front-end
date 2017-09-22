@@ -2,8 +2,12 @@
 
 {% block content %}
 	{% if user %}
-		<textarea id="editor"></textarea>
-		<div class="button" id="submit">{% block action %}{% endblock %}</div>
+		<div class="field">
+			<label class="label">Title</label>
+			<input class="input" type="text" id=title placeholder="Title" value="{{title}}">
+		</div>
+		<div class="field"><textarea id="editor">{{content}}</textarea></div>
+		<div class="button is-pulled-right is-primary" id="submit">{% block action %}{% endblock %}</div>
 	{% else %}
 		<p>Logged out!</p>
 	{% endif %}

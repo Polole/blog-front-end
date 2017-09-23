@@ -2,7 +2,7 @@
 
 {% block content %}
 	{% if post %}
-		<article class="message is-primary is-medium">
+		<article class="message is-medium">
 			<div class="message-header">
 				{{post.title}} ({{post.id}})
 				<div class="is-pulled-right">
@@ -14,7 +14,7 @@
 				</div>
 				{% if user %}
 					<div class="field is-grouped">
-						<button class="button is-dark" id="edit" data-href="/post/{{post.id}}/edit">Edit</button>
+						<button class="button" id="edit" data-href="/post/{{post.id}}/edit">Edit</button>
 						<button class="delete is-medium" id="delete"></button>
 					</div>
 				{% endif %}

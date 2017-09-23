@@ -5,6 +5,13 @@
 		<article class="message is-primary is-medium">
 			<div class="message-header">
 				{{post.title}} ({{post.id}})
+				<div class="is-pulled-right">
+					{% if post.updated_at %}
+						Updated {{post.updated_at | datify}}
+					{% else %}
+						Posted {{post.created_at | datify}}
+					{% endif %}
+				</div>
 				{% if user %}
 					<div class="field is-grouped">
 						<button class="button is-dark" id="edit" data-href="/post/{{post.id}}/edit">Edit</button>
@@ -12,7 +19,7 @@
 					</div>
 				{% endif %}
 			</div>
-			<div class="message-body">
+			<div class="message-body content">
 				{{post.content | safe}}
 			</div>
 		</article>

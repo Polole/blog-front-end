@@ -1,5 +1,9 @@
 "use strict";
-let app = new Templateify("https://memeblog.bloodedguild.me/api", "/templates", "content");
+let app = new Templateify("/api", "/templates", "content");
+app.env.addFilter('datify', function(str){
+    let date = moment(str);
+    return date.fromNow();
+});
 
 (function(){
     class JWTAuth extends TemplateifyAuth {

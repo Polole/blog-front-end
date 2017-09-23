@@ -14,25 +14,32 @@
 {% endblock %}
 
 {% block content %}
-<ul>
+<ul class="column is-8 is-offset-2">
 	{% for post in posts %}
-		<article class="message">
-			<div class="message-header">
-				<a href=/post/{{post.id}} data-navigo>{{post.title}}</a>
-			</div>
-			<div class="message-body">
-				{{post.content | safe}}
-			</div>
-		</article>
+	<article class="message">
+		<div class="message-header">
+			<a href=/post/{{post.id}} data-navigo>{{post.title}}</a>
+			{% if post.updated_at %}
+				Updated {{post.updated_at | datify}}
+			{% else %}
+				Posted {{post.created_at | datify}}
+			{% endif %}
+		</div>
+		<div class="message-body">
+			<div class="post content">
+				{{post.content | safe | striptags | truncate(50)}}
+			</span>
+		</div>
+	</article>
 	{% else %}
-		<article class="message is-info">
-			<div class="message-body">
-				<p>No posts as of yet..</p>
-				{% if user %}
-					<a href=/posts/create data-navigo>Why not make some?</a>
-				{% endif %}
-			</div>
-		</article>
+	<article class="message is-info">
+		<div class="message-body">
+			<p>No posts as of yet..</p>
+			{% if user %}
+			<a href=/posts/create data-navigo>Why not make some?</a>
+			{% endif %}
+		</div>
+	</article>
 	{% endfor %}
 </ul>
 {% endblock %}

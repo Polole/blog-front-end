@@ -11,7 +11,8 @@
     "navigo": "4.7.1",
     "nunjucks": "3.0.0",
     "jquery": "3.2.1",
-	"bulma": "0.5.1"
+	"bulma": "0.5.1",
+	"moment": "2.18.1"
   },
   "repository": {
     "type": "git",

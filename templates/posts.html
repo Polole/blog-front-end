@@ -2,7 +2,7 @@
 
 {% block content %}
 	{% if post %}
-		<article class="message is-medium">
+		<article class="message">
 			<div class="message-header">
 				{{post.title}} ({{post.id}})
 				<div class="is-pulled-right">
@@ -19,7 +19,7 @@
 					</div>
 				{% endif %}
 			</div>
-			<div class="message-body content">
+			<div class="message-body content is-medium">
 				{{post.content | safe}}
 			</div>
 		</article>

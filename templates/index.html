@@ -20,9 +20,9 @@
 		<div class="message-header">
 			<a href=/post/{{post.id}} data-navigo>{{post.title}}</a>
 			{% if post.updated_at == post.created_at %}
-				Posted {{post.created_at | datify}}
+				Posted {{post.created_at | fromNow}}
 			{% else %}
-				Updated {{post.updated_at | datify}}
+				Updated {{post.updated_at | fromNow}}
 			{% endif %}
 		</div>
 		<div class="message-body">

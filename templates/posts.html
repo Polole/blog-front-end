@@ -7,11 +7,7 @@
 			{{post.title}}
 		</h1>
 		<h2 class="subtitle">
-			{% if post.updated_at == post.created_at %}
-				Posted {{post.created_at | datify}}
-			{% else %}
-				Updated {{post.updated_at | datify}}
-			{% endif %}
+			{{post.created_at | realDate}}
 		</h2>
 	</div>
 </div>

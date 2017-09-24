@@ -1,6 +1,10 @@
 "use strict";
 let app = new Templateify("/api", "/templates", "content");
-app.env.addFilter('datify', function(str){
+app.env.addFilter('realDate', function(str){
+    let date = moment(str);
+    return date.format("dddd, MMMM Do YYYY @ h:mm a");
+});
+app.env.addFilter('fromNow', function(str){
     let date = moment(str);
     return date.fromNow();
 });

@@ -19,10 +19,10 @@
 	<article class="message">
 		<div class="message-header">
 			<a href=/post/{{post.id}} data-navigo>{{post.title}}</a>
-			{% if post.updated_at %}
-				Updated {{post.updated_at | datify}}
-			{% else %}
+			{% if post.updated_at == post.created_at %}
 				Posted {{post.created_at | datify}}
+			{% else %}
+				Updated {{post.updated_at | datify}}
 			{% endif %}
 		</div>
 		<div class="message-body">

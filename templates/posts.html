@@ -1,28 +1,47 @@
 {% extends "main.html" %}
 
+{% block hero %}
+<div class="hero-body">
+	<div class="container has-text-centered">
+		<h1 class="title">
+			{{post.title}}
+		</h1>
+		<h2 class="subtitle">
+			{% if post.updated_at == post.created_at %}
+				Posted {{post.created_at | datify}}
+			{% else %}
+				Updated {{post.updated_at | datify}}
+			{% endif %}
+		</h2>
+	</div>
+</div>
+{% if user %}
+	<div class="hero-foot">
+		<div class="container is-pulled-right">
+			<nav class="tabs is-boxed">
+				<ul>
+					<li>
+						<a id="edit">Edit</a>
+					</li>
+					<li>
+						<a id="delete">Delete</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+{% endif %}
+
+{% endblock %}
+
 {% block content %}
 	{% if post %}
-		<article class="message is-medium">
-			<div class="message-header">
-				{{post.title}} ({{post.id}})
-				<div class="is-pulled-right">
-					{% if post.updated_at %}
-						Updated {{post.updated_at | datify}}
-					{% else %}
-						Posted {{post.created_at | datify}}
-					{% endif %}
-				</div>
-				{% if user %}
-					<div class="field is-grouped">
-						<button class="button" id="edit" data-href="/post/{{post.id}}/edit">Edit</button>
-						<button class="delete is-medium" id="delete"></button>
-					</div>
-				{% endif %}
-			</div>
-			<div class="message-body content">
-				{{post.content | safe}}
-			</div>
-		</article>
+	<div class="container content is-hidden-desktop">
+		{{post.content | safe}}
+	</div>
+	<div class="container content column is-8 is-offset-2 is-hidden-touch">
+		{{post.content | safe}}
+	</div>
 	{% endif %}
 {% endblock %}
 

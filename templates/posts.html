@@ -31,8 +31,16 @@
 {% endblock %}
 
 {% block content %}
-	{% if post %}
-	<div class="modal" id="dialog">
+{% if post %}
+	<div class="modal" id="image-modal">
+		<div class="modal-background"></div>
+		<div class="modal-content">
+			<p class="image" id="image-box">
+			</p>
+		</div>
+		<button class="modal-close close-dialog is-large"></button>
+	</div>
+	<div class="modal" id="delete-dialog">
 		<div class="modal-background"></div>
 		<div class="modal-card">
 			<header class="modal-card-head">

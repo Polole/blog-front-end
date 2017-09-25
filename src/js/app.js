@@ -91,13 +91,17 @@ app.env.addFilter('fromNow', function(str){
                 })
             })
             $('#open').click(function(){
-                $('.modal').addClass("is-active");
+                $('#delete-dialog').addClass("is-active");
             })
             $('.close-dialog').click(function(){
                 $('.modal').removeClass("is-active");
             })
             $('#edit').click(function(){
                 templateify.navigateByViewName("editPostView", params)
+            })
+            $('img').click(function(){
+                $('#image-modal').addClass("is-active")
+                $('#image-box').html(this.cloneNode());
             })
         }
     }

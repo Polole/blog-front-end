@@ -1,7 +1,8 @@
 {% extends "main.html" %}
 
 {% block hero %}
-<div class="hero-body" id="hero">
+{% if post %}
+	<div class="hero-body" id="hero">
 	<div class="container has-text-centered">
 		<h1 class="title">
 			{{post.title}}
@@ -10,7 +11,7 @@
 			{{post.created_at | realDate}}
 		</h2>
 	</div>
-</div>
+	</div>
 {% if user %}
 	<div class="hero-foot">
 		<div class="container is-pulled-right">
@@ -26,6 +27,7 @@
 			</nav>
 		</div>
 	</div>
+{% endif %}
 {% endif %}
 
 {% endblock %}

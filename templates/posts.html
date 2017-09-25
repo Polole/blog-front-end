@@ -20,7 +20,7 @@
 						<a id="edit">Edit</a>
 					</li>
 					<li>
-						<a id="delete">Delete</a>
+						<a id="open">Delete</a>
 					</li>
 				</ul>
 			</nav>
@@ -32,6 +32,19 @@
 
 {% block content %}
 	{% if post %}
+	<div class="modal" id="dialog">
+		<div class="modal-background"></div>
+		<div class="modal-card">
+			<header class="modal-card-head">
+				<p class="modal-card-title">Are you sure?</p>
+				<button class="delete close-dialog"></button>
+			</header>
+			<footer class="modal-card-foot">
+				<button class="button is-danger" id="delete">Delete Post</button>
+				<button class="button close-dialog">Close Dialog</button>
+			</footer>
+		</div>
+	</div>
 	<div class="container content is-hidden-desktop">
 		{{post.content | safe}}
 	</div>

@@ -90,6 +90,12 @@ app.env.addFilter('fromNow', function(str){
                     templateify.doFailRender(self, "Could not delete post. Are you logged in?")
                 })
             })
+            $('#open').click(function(){
+                $('.modal').addClass("is-active");
+            })
+            $('.close-dialog').click(function(){
+                $('.modal').removeClass("is-active");
+            })
             $('#edit').click(function(){
                 templateify.navigateByViewName("editPostView", params)
             })

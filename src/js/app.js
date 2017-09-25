@@ -64,6 +64,12 @@ app.env.addFilter('fromNow', function(str){
         },
         callback: function(templateify, data){
             return data;
+        },
+        htmlInit: function(templateify){
+            let $hero = $('#hero');
+            if($hero.length > 0){
+                $hero[0].scrollIntoView(true);
+            }
         }
     }
     app.addTemplate("index", new TemplateifyTemplate("/", "index.html", indexSettings))
@@ -107,7 +113,10 @@ app.env.addFilter('fromNow', function(str){
                 $('#image-modal').addClass("is-active")
                 $('#image-box').html(this.cloneNode());
             })
-            $('#hero')[0].scrollIntoView(true);
+            let $hero = $('#hero')
+            if($hero.length > 0){
+                $hero[0].scrollIntoView(true);
+            }
         }
     }
     app.addTemplate("postView", new TemplateifyTemplate("/post/:id", "posts.html", postSettings))

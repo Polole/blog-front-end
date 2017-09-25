@@ -96,6 +96,9 @@ app.env.addFilter('fromNow', function(str){
             $('.close-dialog').click(function(){
                 $('.modal').removeClass("is-active");
             })
+            $('.modal-background').click(function(){
+                $('.modal').removeClass("is-active");
+            })
             $('#edit').click(function(){
                 templateify.navigateByViewName("editPostView", params)
             })

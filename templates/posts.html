@@ -59,6 +59,18 @@
 	<div class="container content column is-8 is-offset-2 is-hidden-touch">
 		{{post.content | safe}}
 	</div>
-	{% endif %}
+	<nav class="pagination is-centered" role="navigation">
+		{% if post.prev %}
+		<a class="pagination-previous" href="/post/{{post.prev}}" data-navigo>Previous</a>
+		{% else %}
+		<a class="pagination-previous" disabled>Previous</a>
+		{% endif %}
+		{% if post.next %}
+		<a class="pagination-next" href="/post/{{post.next}}" data-navigo>Next</a>
+		{% else %}
+		<a class="pagination-next" disabled>Next</a>
+		{% endif %}
+	</nav>
+{% endif %}
 {% endblock %}
 

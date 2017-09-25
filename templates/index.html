@@ -1,5 +1,6 @@
 {% extends "main.html" %}
 
+
 {% block hero%}
 <div class="hero-body">
 	<div class="container">
@@ -42,4 +43,31 @@
 	</article>
 	{% endfor %}
 </ul>
+<nav class="pagination">
+	{% if has_prev %}
+	<a class="pagination-previous" href="/?page={{page -1}}" data-navigo>Previous</a>
+	{% else %}
+	<a class="pagination-previous" disabled>Previous</a>
+	{% endif %}
+	{% if has_next %}
+	<a class="pagination-next" href="/?page={{page + 1}}" data-navigo>Next Page</a>
+	{% else %}
+	<a class="pagination-next" disabled>Next Page</a>
+	{% endif %}
+	<ul class="pagination-list">
+		{% if has_prev %}
+		<li>
+			<a class="pagination-link" href="/?page={{page -1}}" data-navigo>{{page -1}}</a>
+		</li>
+		{% endif %}
+		<li>
+			<a class="pagination-link is-current">{{page}}</a>
+		</li>
+		{% if has_next %}
+		<li>
+			<a class="pagination-link" href="/?page={{page + 1}}" data-navigo>{{page + 1}}</a>
+		</li>
+		{% endif %}
+	</ul>
+</nav>
 {% endblock %}

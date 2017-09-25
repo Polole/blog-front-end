@@ -59,10 +59,11 @@ app.env.addFilter('fromNow', function(str){
 
     let indexSettings = {
         apiLocation: "/posts",
+        urlConstructor: function(params){
+            return this.apiLocation + window.location.search;
+        },
         callback: function(templateify, data){
-            return {
-                "posts": data
-            }
+            return data;
         }
     }
     app.addTemplate("index", new TemplateifyTemplate("/", "index.html", indexSettings))

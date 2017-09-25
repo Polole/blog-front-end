@@ -106,6 +106,7 @@ app.env.addFilter('fromNow', function(str){
                 $('#image-modal').addClass("is-active")
                 $('#image-box').html(this.cloneNode());
             })
+            $('#hero')[0].scrollIntoView(true);
         }
     }
     app.addTemplate("postView", new TemplateifyTemplate("/post/:id", "posts.html", postSettings))

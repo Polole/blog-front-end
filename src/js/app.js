@@ -100,7 +100,7 @@ app.env.addFilter('fromNow', function(str){
                 $('.modal').removeClass("is-active");
             })
             $('#edit').click(function(){
-                templateify.navigateByViewName("editPostView", params)
+                templateify.navigateByViewNameWithData("editPostView", templateify.currentData.post)
             })
             $('img').click(function(){
                 $('#image-modal').addClass("is-active")

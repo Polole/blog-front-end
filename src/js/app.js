@@ -8,6 +8,16 @@ app.env.addFilter('fromNow', function(str){
     let date = moment(str);
     return date.fromNow();
 });
+app.env.addFilter('tagify', function(tags){
+    let tagged = "";
+    if(tags.length > 0) {
+        tagged = tags[0].tag;
+    }
+    for(let tag of tags.slice(1)) {
+        tagged += ", " + tag.tag;
+    };
+    return tagged;
+});
 
 (function(){
     class JWTAuth extends TemplateifyAuth {
@@ -128,10 +138,12 @@ app.env.addFilter('fromNow', function(str){
             if(content.find('#editor').length){
                 CKEDITOR.replace('editor')
                 content.find('#submit').click(function(event){
-                    let title = $('#title').val() || "Arbitrary Title"
+                    let title = $('#title').val() || "Arbitrary Title";
+                    let tags = $('#tags').val();
                     let data = JSON.stringify({
                         "title": title,
-                        "content": CKEDITOR.instances.editor.getData()
+                        "content": CKEDITOR.instances.editor.getData(),
+                        "tags": tags
                     })
                     let requestOptions = {
                         data: data,

@@ -7,6 +7,10 @@
 			<input class="input" type="text" id=title placeholder="Title" value="{{title}}">
 		</div>
 		<div class="field"><textarea id="editor">{{content}}</textarea></div>
+		<div class="field">
+			<label class="label">Tags</label>
+			<input class="input" type="text" id=tags placeholder="Tags (comma separated)" value="{{tags | tagify}}">
+		</div>
 		<div class="button is-pulled-right is-primary" id="submit">{% block action %}{% endblock %}</div>
 	{% else %}
 		<p>Logged out!</p>

@@ -57,7 +57,7 @@
 	</div>
 	<div class="container content is-hidden-desktop">
 		{{post.content | safe}}
-		<div class="is-pulled-right">
+		<div>
 			{% for tag in post.tags %}
 			<a class="tag" href="/?tagged={{tag.tag}}" data-navigo>#{{tag.tag}}</a>
 			{% endfor %}
@@ -65,7 +65,7 @@
 	</div>
 	<div class="container content column is-8 is-offset-2 is-hidden-touch">
 		{{post.content | safe}}
-		<div class="is-pulled-right">
+		<div>
 			{% for tag in post.tags %}
 			<a class="tag" href="/?tagged={{tag.tag}}" data-navigo>#{{tag.tag}}</a>
 			{% endfor %}

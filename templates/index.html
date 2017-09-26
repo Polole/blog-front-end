@@ -48,6 +48,7 @@
 	</article>
 	{% endfor %}
 </ul>
+{% if posts %}
 <nav class="pagination">
 	{% set prev_str = "/?page=" + (page - 1) %}
 	{% set next_str = "/?page=" + (page + 1) %}
@@ -81,4 +82,5 @@
 		{% endif %}
 	</ul>
 </nav>
+{% endif %}
 {% endblock %}

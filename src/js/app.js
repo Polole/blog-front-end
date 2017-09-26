@@ -10,6 +10,9 @@ app.env.addFilter('fromNow', function(str){
 });
 app.env.addFilter('tagify', function(tags){
     let tagged = "";
+    if(!tags){
+        tags = [];
+    }
     if(tags.length > 0) {
         tagged = tags[0].tag;
     }

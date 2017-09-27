@@ -23,6 +23,16 @@ app.env.addFilter('tagify', function(tags){
 });
 
 (function(){
+    app.loadingFunc = function(xhr){
+        setTimeout(function(){
+            if(xhr.readyState != 4){
+                $('.pageloader').addClass("is-active");
+            }
+        }, 300)
+    };
+    app.doneFunc = function(){
+        $('.pageloader').removeClass("is-active");
+    };
     class JWTAuth extends TemplateifyAuth {
 
         constructor(url, callbackUrl){

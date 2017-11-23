@@ -87,12 +87,6 @@ app.env.addFilter('tagify', function(tags){
         },
         callback: function(templateify, data){
             return data;
-        },
-        htmlInit: function(templateify){
-            let $hero = $('#hero');
-            if($hero.length > 0){
-                $hero[0].scrollIntoView(true);
-            }
         }
     }
     app.addTemplate("index", new TemplateifyTemplate("/", "index.html", indexSettings))
@@ -136,10 +130,6 @@ app.env.addFilter('tagify', function(tags){
                 $('#image-modal').addClass("is-active")
                 $('#image-box').html(this.cloneNode());
             })
-            let $hero = $('#hero')
-            if($hero.length > 0){
-                $hero[0].scrollIntoView(true);
-            }
         }
     }
     app.addTemplate("postView", new TemplateifyTemplate("/post/:id", "posts.html", postSettings))

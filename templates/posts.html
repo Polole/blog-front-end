@@ -1,4 +1,5 @@
 {% extends "main.html" %}
+{% import "macros.html" as macros %}
 
 {% block hero %}
 {% if post %}
@@ -34,6 +35,7 @@
 
 {% block content %}
 {% if post %}
+	{{ macros.post_pagination(post.prev, post.next) }}
 	<div class="modal" id="image-modal">
 		<div class="modal-background"></div>
 		<div class="modal-content">
@@ -71,18 +73,7 @@
 			{% endfor %}
 		</div>
 	</div>
-	<nav class="pagination is-centered" role="navigation">
-		{% if post.prev %}
-		<a class="pagination-previous" href="/post/{{post.prev}}" data-navigo>Previous</a>
-		{% else %}
-		<a class="pagination-previous" disabled>Previous</a>
-		{% endif %}
-		{% if post.next %}
-		<a class="pagination-next" href="/post/{{post.next}}" data-navigo>Next</a>
-		{% else %}
-		<a class="pagination-next" disabled>Next</a>
-		{% endif %}
-	</nav>
+	{{ macros.post_pagination(post.prev, post.next) }}
 {% endif %}
 {% endblock %}
 

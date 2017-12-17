@@ -1,5 +1,5 @@
 "use strict";
-let app = new Templateify("/api", "/templates", "content");
+let app = new Templateify("https://memeblog.bloodedguild.me/api", "/templates", "content");
 app.env.addFilter('realDate', function(str){
     let date = moment(str);
     return date.format("dddd, MMMM Do YYYY @ h:mm a");

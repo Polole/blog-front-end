@@ -1,0 +1,50 @@
+{% macro pagination(page, has_next, has_prev, tagged='') %}
+<nav class="pagination">
+	{% set prev_str = "/?page=" + (page - 1) %}
+	{% set next_str = "/?page=" + (page + 1) %}
+	{% if tagged %}
+		{% set prev_str = prev_str + "&tagged=" + tagged %}
+		{% set next_str = next_str + "&tagged=" + tagged %}
+	{% endif %}
+	{% if has_prev %}
+	<a class="pagination-previous" href="{{prev_str}}" data-navigo>Previous</a>
+	{% else %}
+	<a class="pagination-previous" disabled>Previous</a>
+	{% endif %}
+	{% if has_next %}
+	<a class="pagination-next" href="{{next_str}}" data-navigo>Next Page</a>
+	{% else %}
+	<a class="pagination-next" disabled>Next Page</a>
+	{% endif %}
+	<ul class="pagination-list">
+		{% if has_prev %}
+		<li>
+			<a class="pagination-link" href="{{prev_str}}" data-navigo>{{page -1}}</a>
+		</li>
+		{% endif %}
+		<li>
+			<a class="pagination-link is-current">{{page}}</a>
+		</li>
+		{% if has_next %}
+		<li>
+			<a class="pagination-link" href="{{next_str}}" data-navigo>{{page + 1}}</a>
+		</li>
+		{% endif %}
+	</ul>
+</nav>
+{% endmacro %}
+
+{% macro post_pagination(prev, next) %}
+	<nav class="pagination is-centered" role="navigation">
+		{% if prev %}
+		<a class="pagination-previous" href="/post/{{prev}}" data-navigo>Previous</a>
+		{% else %}
+		<a class="pagination-previous" disabled>Previous</a>
+		{% endif %}
+		{% if next %}
+		<a class="pagination-next" href="/post/{{next}}" data-navigo>Next</a>
+		{% else %}
+		<a class="pagination-next" disabled>Next</a>
+		{% endif %}
+	</nav>
+{% endmacro %}

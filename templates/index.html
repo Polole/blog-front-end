@@ -17,7 +17,7 @@
 
 {% block content %}
 {% if posts %}
-{{macros.pagination(page, has_next, has_prev, tagged)}}
+{{macros.pagination(page, max_page, tagged)}}
 {% endif %}
 <ul class="column is-8 is-offset-2">
 	{% for post in posts %}
@@ -53,6 +53,6 @@
 	{% endfor %}
 </ul>
 {% if posts %}
-{{macros.pagination(page, has_next, has_prev, tagged)}}
+{{macros.pagination(page, max_page, tagged)}}
 {% endif %}
 {% endblock %}

@@ -1,33 +1,57 @@
-{% macro pagination(page, has_next, has_prev, tagged='') %}
+{% macro pagination(page, max_page, tagged='') %}
 <nav class="pagination">
 	{% set prev_str = "/?page=" + (page - 1) %}
 	{% set next_str = "/?page=" + (page + 1) %}
+	{% set first_page = "/" %}
+	{% set last_page = "/?page=" + (max_page) %}
 	{% if tagged %}
 		{% set prev_str = prev_str + "&tagged=" + tagged %}
 		{% set next_str = next_str + "&tagged=" + tagged %}
+		{% set first_page = first_page + "?tagged=" + tagged %}
+		{% set last_page = last_page + "&tagged=" + tagged %}
 	{% endif %}
-	{% if has_prev %}
+	{% if page > 1 %}
 	<a class="pagination-previous" href="{{prev_str}}" data-navigo>Previous</a>
 	{% else %}
 	<a class="pagination-previous" disabled>Previous</a>
 	{% endif %}
-	{% if has_next %}
+	{% if page < max_page %}
 	<a class="pagination-next" href="{{next_str}}" data-navigo>Next Page</a>
 	{% else %}
 	<a class="pagination-next" disabled>Next Page</a>
 	{% endif %}
 	<ul class="pagination-list">
-		{% if has_prev %}
+		{% if page > 1 %}
 		<li>
-			<a class="pagination-link" href="{{prev_str}}" data-navigo>{{page -1}}</a>
+			<a class="pagination-link" href="{{first_page}}" data-navigo>1</a>
+		</li>
+		{% endif %}
+		{% if page > 3 %}
+		<li>
+			<a class="pagination-ellipsis">&hellip;</a>
+		</li>
+		{% endif %}
+		{% if page > 2 %}
+		<li>
+			<a class="pagination-link" href="{{prev_str}}" data-navigo>{{page - 1}}</a>
 		</li>
 		{% endif %}
 		<li>
 			<a class="pagination-link is-current">{{page}}</a>
 		</li>
-		{% if has_next %}
+		{% if page < max_page - 1 %}
 		<li>
 			<a class="pagination-link" href="{{next_str}}" data-navigo>{{page + 1}}</a>
+		</li>
+		{% endif %}
+		{% if page < max_page - 2 %}
+		<li>
+			<a class="pagination-ellipsis">&hellip;</a>
+		</li>
+		{% endif %}
+		{% if page != max_page %}
+		<li>
+			<a class="pagination-link" href="{{last_page}}" data-navigo>{{max_page}}</a>
 		</li>
 		{% endif %}
 	</ul>
